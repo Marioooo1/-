@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator TCO Mobil</title>
+<style>
+/* ============================================================
+   KALKULATOR TCO MOBIL BARU — token & tema (light/dark)
+   ============================================================ */
+:root {
+    color-scheme: light;
+    --bg: #f4f6f9;
+    --surface: #ffffff;
+    --surface-2: #eef1f6;
+    --ink: #16181d;
+    --ink-2: #4b5261;
+    --ink-3: #7c8494;
+    --border: #e2e6ee;
+    --accent: #2B579A;
+    --accent-strong: #1d3c6b;
+    --accent-soft: #e8eff7;
+    --on-accent: #ffffff;
+    --hero-from: #2B579A;
+    --hero-to: #16305c;
+    --hero-ink: #ffffff;
+    --good: #0a7d3a;
+    --good-soft: #e7f4ec;
+    --warn: #b45309;
+    --warn-soft: #fdf0e2;
+    --s-ang: #2a78d6;
+    --s-energi: #eb6834;
+    --s-ops: #1baf7a;
+    --s-tahunan: #eda100;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 1px 2px rgba(20, 24, 40, 0.06), 0 6px 20px rgba(20, 24, 40, 0.05);
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #0d0d0d;
+        --surface: #17181a;
+        --surface-2: #222428;
+        --ink: #ffffff;
+        --ink-2: #c3c2b7;
+        --ink-3: #898781;
+        --border: #2c2e33;
+        --accent: #3987e5;
+        --accent-strong: #6da7ec;
+        --accent-soft: #17283f;
+        --on-accent: #0b0b0b;
+        --hero-from: #1b3a6b;
+        --hero-to: #0e1f3a;
+        --hero-ink: #ffffff;
+        --good: #0ca30c;
+        --good-soft: #12291a;
+        --warn: #fab219;
+        --warn-soft: #33260b;
+        --s-ang: #3987e5;
+        --s-energi: #d95926;
+        --s-ops: #199e70;
+        --s-tahunan: #c98500;
+        --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 20px rgba(0,0,0,0.35);
+    }
+}
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0d0d0d;
+    --surface: #17181a;
+    --surface-2: #222428;
+    --ink: #ffffff;
+    --ink-2: #c3c2b7;
+    --ink-3: #898781;
+    --border: #2c2e33;
+    --accent: #3987e5;
+    --accent-strong: #6da7ec;
+    --accent-soft: #17283f;
+    --on-accent: #0b0b0b;
+    --hero-from: #1b3a6b;
+    --hero-to: #0e1f3a;
+    --hero-ink: #ffffff;
+    --good: #0ca30c;
+    --good-soft: #12291a;
+    --warn: #fab219;
+    --warn-soft: #33260b;
+    --s-ang: #3987e5;
+    --s-energi: #d95926;
+    --s-ops: #199e70;
+    --s-tahunan: #c98500;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 20px rgba(0,0,0,0.35);
+}
+
+/* === Reset & base === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.num, .num-inline {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+}
+
+/* === Header === */
+.site-head {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky; top: 0; z-index: 20;
+}
+.site-head-inner {
+    max-width: 1180px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-mark {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 1rem;
+    box-shadow: 0 3px 10px rgba(43, 87, 154, 0.28);
+}
+.brand h1 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.2px; }
+.brand p { font-size: 0.8rem; color: var(--ink-3); }
+.rule-chip {
+    font-size: 0.78rem; font-weight: 600; color: var(--accent-strong);
+    background: var(--accent-soft); border: 1px solid transparent;
+    padding: 6px 12px; border-radius: 50px; white-space: nowrap;
+}
+
+/* === Layout === */
+.wrap { max-width: 1180px; margin: 0 auto; padding: 24px; }
+.grid { display: grid; grid-template-columns: 400px 1fr; gap: 24px; align-items: start; }
+@media (max-width: 920px) {
+    .grid { grid-template-columns: 1fr; }
+}
+
+/* === Cards === */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+.card h2 {
+    font-size: 0.82rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: 4px;
+}
+.card .card-sub { font-size: 0.82rem; color: var(--ink-3); margin-bottom: 16px; }
+
+/* === Form fields === */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.field > label {
+    display: block; font-size: 0.86rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px;
+}
+.input-group {
+    display: flex; align-items: center;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--surface); overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input-group:focus-within {
+    border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.input-prefix, .input-suffix {
+    font-size: 0.85rem; color: var(--ink-3); padding: 0 12px; font-weight: 600;
+    background: var(--surface-2); align-self: stretch; display: flex; align-items: center;
+}
+.input-group input {
+    flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+    color: var(--ink); font: inherit; padding: 10px 12px;
+    font-variant-numeric: tabular-nums;
+}
+.input-group input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+.input-group input::-webkit-outer-spin-button,
+.input-group input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.hint { display: block; font-size: 0.75rem; color: var(--ink-3); margin-top: 4px; }
+
+/* Range slider */
+.range-row { display: flex; align-items: center; gap: 12px; }
+.range-row input[type="range"] { flex: 1; accent-color: var(--accent); }
+.range-val {
+    font-size: 0.85rem; font-weight: 700; color: var(--accent-strong);
+    min-width: 68px; text-align: right; font-variant-numeric: tabular-nums;
+}
+.range-row .input-group { width: 110px; flex: 0 0 110px; }
+
+/* Segmented control (energi) */
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; background: var(--surface-2); padding: 4px; border-radius: var(--radius-sm); }
+.seg button {
+    border: none; background: transparent; color: var(--ink-2); font: inherit; font-weight: 600;
+    font-size: 0.86rem; padding: 8px 10px; border-radius: 7px; cursor: pointer; transition: all 0.15s;
+}
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--accent-strong); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.energy-pane { display: none; }
+.energy-pane.active { display: block; }
+
+/* === Results === */
+.hero {
+    background: linear-gradient(135deg, var(--hero-from), var(--hero-to));
+    color: var(--hero-ink); border-radius: var(--radius); padding: 24px;
+    box-shadow: 0 10px 30px rgba(43, 87, 154, 0.28); margin-bottom: 16px;
+}
+.hero-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; }
+.hero-value { font-size: clamp(1.9rem, 4.5vw, 2.7rem); font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; margin: 6px 0 2px; }
+.hero-sub { font-size: 0.9rem; opacity: 0.9; }
+
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 680px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+.kpi {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 16px;
+}
+.kpi-label { font-size: 0.76rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); margin-bottom: 6px; }
+.kpi-value { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.3px; color: var(--ink); }
+.kpi-gaji .kpi-value { color: var(--accent); }
+.kpi-note { font-size: 0.75rem; color: var(--ink-3); margin-top: 2px; }
+
+/* Verdict chip */
+.verdict { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; padding: 10px 14px; border-radius: var(--radius-sm); }
+.verdict.ok { background: var(--good-soft); color: var(--good); }
+.verdict.no { background: var(--warn-soft); color: var(--warn); }
+.verdict .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
+
+/* Stacked bar */
+.bar-wrap { margin: 8px 0 14px; }
+.bar { display: flex; gap: 2px; height: 16px; border-radius: 4px; overflow: hidden; }
+.bar .seg { height: 100%; flex-basis: 0; min-width: 0; }
+.seg-ang { background: var(--s-ang); }
+.seg-energi { background: var(--s-energi); }
+.seg-ops { background: var(--s-ops); }
+.seg-tahunan { background: var(--s-tahunan); }
+
+/* Legend */
+.legend { display: flex; flex-direction: column; gap: 8px; }
+.legend-row { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; }
+.legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+.legend-name { color: var(--ink-2); flex: 1; }
+.legend-val { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.legend-pct { color: var(--ink-3); font-size: 0.8rem; width: 46px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Table */
+.table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.table th, .table td { text-align: right; padding: 9px 10px; }
+.table th:first-child, .table td:first-child { text-align: left; }
+.table thead th {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3);
+    border-bottom: 1px solid var(--border); font-weight: 600;
+}
+.table tbody tr { border-bottom: 1px solid var(--border); }
+.table tbody tr:last-child { border-bottom: none; }
+.table td { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.table td:first-child { color: var(--ink); font-weight: 500; }
+.table .total-row td { border-top: 2px solid var(--border); font-weight: 800; color: var(--ink); }
+.table-scroll { overflow-x: auto; }
+
+/* Summary strip */
+.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 4px; }
+@media (max-width: 680px) { .summary { grid-template-columns: 1fr; } }
+.summary-item { background: var(--surface-2); border-radius: var(--radius-sm); padding: 12px 14px; }
+.summary-label { font-size: 0.76rem; color: var(--ink-3); font-weight: 600; }
+.summary-value { font-size: 1.05rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* Footer */
+.foot { max-width: 1180px; margin: 0 auto; padding: 8px 24px 40px; font-size: 0.76rem; color: var(--ink-3); line-height: 1.6; }
+.foot strong { color: var(--ink-2); }
+
+/* === Buttons === */
+.btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: inherit; font-size: 0.86rem; font-weight: 600; color: var(--accent-strong);
+    background: var(--accent-soft); border: 1px solid transparent; border-radius: var(--radius-sm);
+    padding: 9px 16px; cursor: pointer; transition: all 0.15s;
+}
+.btn-ghost:hover { box-shadow: 0 2px 8px rgba(43, 87, 154, 0.18); transform: translateY(-1px); }
+.btn-ghost:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.export-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* === Details (perbandingan) === */
+details.card > summary {
+    cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px;
+    font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3);
+}
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::before { content: '▸'; transition: transform 0.15s; color: var(--accent); font-size: 0.9rem; }
+details.card[open] > summary::before { transform: rotate(90deg); }
+details.card > .card-body { margin-top: 16px; }
+details.card > .card-body .card-sub { font-size: 0.82rem; color: var(--ink-3); margin-bottom: 12px; }
+.mt { margin-top: 14px; }
+
+/* === Bar chart (simulasi tenor) === */
+.charts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 680px) { .charts { grid-template-columns: 1fr; } }
+.chart h3 { font-size: 0.85rem; font-weight: 600; color: var(--ink-2); margin-bottom: 12px; }
+.barchart { display: flex; align-items: flex-end; gap: 6px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+.bar-label { font-size: 0.66rem; color: var(--ink-2); margin-bottom: 4px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.bar-track { height: 110px; width: 100%; max-width: 34px; display: flex; align-items: flex-end; background: var(--surface-2); border-radius: 4px; }
+.bar-fill { width: 100%; background: var(--ink-3); border-radius: 4px 4px 2px 2px; transition: height 0.2s; }
+.bar-col.sel .bar-fill { background: var(--accent); }
+.bar-col.sel .bar-label { color: var(--accent-strong); font-weight: 700; }
+.bar-x { font-size: 0.66rem; color: var(--ink-3); margin-top: 6px; font-variant-numeric: tabular-nums; }
+
+/* === Perbandingan === */
+.cmp-note { font-size: 0.82rem; color: var(--ink-3); margin-bottom: 14px; }
+.cmp-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.cmp-table th, .cmp-table td { text-align: right; padding: 9px 10px; }
+.cmp-table th:first-child, .cmp-table td:first-child { text-align: left; }
+.cmp-table thead th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); border-bottom: 1px solid var(--border); font-weight: 600; }
+.cmp-table tbody tr { border-bottom: 1px solid var(--border); }
+.cmp-table tbody tr:last-child { border-bottom: none; }
+.cmp-table td { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.cmp-table td:first-child { color: var(--ink); font-weight: 500; }
+.cmp-table .win { color: var(--good); font-weight: 700; }
+
+/* === Print === */
+@media print {
+    .site-head, .grid > form, .export-card, .foot, .btn-ghost { display: none !important; }
+    .grid { grid-template-columns: 1fr; }
+    .wrap { padding: 0; }
+    body { background: #fff; }
+    .card, .kpi, .hero { box-shadow: none !important; }
+    .hero { background: #16305c !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .bar-fill, .seg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-head">
+    <div class="site-head-inner">
+        <div class="brand">
+            <div class="brand-mark">🚗</div>
+            <div>
+                <h1>Kalkulator TCO Mobil</h1>
+                <p>Total biaya kepemilikan kendaraan baru</p>
+            </div>
+        </div>
+        <span class="rule-chip">Cicilan ≤ 30% gaji</span>
+    </div>
+</header>
+
+<div class="wrap">
+    <div class="grid">
+
+        <!-- ===== FORM ===== -->
+        <form id="tcoForm" autocomplete="off" onsubmit="return false;">
+
+            <div class="card">
+                <h2>Harga &amp; Kredit</h2>
+                <div class="field">
+                    <label for="hargaOtr">Harga mobil (OTR)</label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="hargaOtr" type="number" value="250000000" min="0" step="1000000" inputmode="numeric">
+                    </div>
+                    <span class="hint">Harga on-the-road</span>
+                </div>
+                <div class="field">
+                    <label for="dpPctRange">Uang muka (DP)</label>
+                    <div class="range-row">
+                        <input id="dpPctRange" type="range" min="0" max="90" step="1" value="20" aria-label="Persentase uang muka">
+                        <div class="input-group">
+                            <input id="dpPct" type="number" value="20" min="0" max="100" step="1" inputmode="numeric" aria-label="Persentase uang muka">
+                            <span class="input-suffix">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="tenorTahun">Tenor (lama kredit)</label>
+                    <div class="range-row">
+                        <input id="tenorTahun" type="range" min="1" max="8" step="1" value="5" aria-label="Tenor kredit">
+                        <span class="range-val" id="tenorVal">5 tahun</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="bungaFlat">Bunga flat per tahun</label>
+                    <div class="input-group">
+                        <input id="bungaFlat" type="number" value="4.5" min="0" step="0.1" inputmode="decimal">
+                        <span class="input-suffix">%</span>
+                    </div>
+                    <span class="hint">Bunga flat (dihitung dari pokok pinjaman)</span>
+                </div>
+                <div class="field">
+                    <label for="admin">Biaya admin &amp; provisi</label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="admin" type="number" value="3500000" min="0" step="100000" inputmode="numeric">
+                    </div>
+                    <span class="hint">Dibayar sekali di awal</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Energi</h2>
+                <div class="field">
+                    <div class="seg" role="group" aria-label="Jenis energi">
+                        <button type="button" id="btnBbm" aria-pressed="true">⛽ Bensin</button>
+                        <button type="button" id="btnEv" aria-pressed="false">🔌 Listrik (EV)</button>
+                    </div>
+                    <input type="hidden" id="energiMode" value="bbm">
+                </div>
+                <div class="field">
+                    <label for="jarak">Jarak tempuh per bulan</label>
+                    <div class="input-group">
+                        <input id="jarak" type="number" value="1000" min="0" step="50" inputmode="numeric">
+                        <span class="input-suffix">km</span>
+                    </div>
+                </div>
+
+                <div class="energy-pane active" id="paneBbm">
+                    <div class="field">
+                        <label for="bbmKonsumsi">Konsumsi BBM</label>
+                        <div class="input-group">
+                            <input id="bbmKonsumsi" type="number" value="12" min="0.1" step="0.5" inputmode="decimal">
+                            <span class="input-suffix">km/liter</span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="bbmHarga">Harga BBM</label>
+                        <div class="input-group">
+                            <span class="input-prefix">Rp</span>
+                            <input id="bbmHarga" type="number" value="13000" min="0" step="500" inputmode="numeric">
+                            <span class="input-suffix">/liter</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="energy-pane" id="paneEv">
+                    <div class="field">
+                        <label for="evKonsumsi">Konsumsi listrik</label>
+                        <div class="input-group">
+                            <input id="evKonsumsi" type="number" value="6" min="0.1" step="0.5" inputmode="decimal">
+                            <span class="input-suffix">km/kWh</span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="evHarga">Tarif listrik</label>
+                        <div class="input-group">
+                            <span class="input-prefix">Rp</span>
+                            <input id="evHarga" type="number" value="1700" min="0" step="100" inputmode="numeric">
+                            <span class="input-suffix">/kWh</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Biaya Bulanan Lainnya</h2>
+                <div class="field">
+                    <label for="tol">Biaya tol</label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="tol" type="number" value="400000" min="0" step="50000" inputmode="numeric">
+                        <span class="input-suffix">/bulan</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="parkir">Biaya parkir</label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="parkir" type="number" value="200000" min="0" step="25000" inputmode="numeric">
+                        <span class="input-suffix">/bulan</span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="servis">Servis &amp; perawatan</label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="servis" type="number" value="250000" min="0" step="25000" inputmode="numeric">
+                        <span class="input-suffix">/bulan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Biaya Tahunan</h2>
+                <div class="field">
+                    <label for="asuransi">Asuransi</label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="asuransi" type="number" value="6250000" min="0" step="250000" inputmode="numeric">
+                        <span class="input-suffix">/tahun</span>
+                    </div>
+                    <span class="hint">≈ 2–3% dari harga mobil per tahun</span>
+                </div>
+                <div class="field">
+                    <label for="pajak">Pajak kendaraan (PKB)</label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="pajak" type="number" value="3750000" min="0" step="250000" inputmode="numeric">
+                        <span class="input-suffix">/tahun</span>
+                    </div>
+                    <span class="hint">≈ 1–1.5% dari harga mobil per tahun</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Aturan Gaji</h2>
+                <div class="field">
+                    <label for="rasioRange">Batas cicilan dari gaji</label>
+                    <div class="range-row">
+                        <input id="rasioRange" type="range" min="10" max="50" step="1" value="30" aria-label="Batas cicilan dari gaji">
+                        <span class="range-val" id="rasioVal">30%</span>
+                    </div>
+                    <span class="hint">Rekomendasi gaji = angsuran ÷ persentase ini</span>
+                </div>
+                <div class="field">
+                    <label for="gajiSaya">Gaji saya sekarang <em style="font-style:normal;color:var(--ink-3)">(opsional)</em></label>
+                    <div class="input-group">
+                        <span class="input-prefix">Rp</span>
+                        <input id="gajiSaya" type="number" min="0" step="500000" inputmode="numeric" placeholder="contoh: 15000000">
+                        <span class="input-suffix">/bulan</span>
+                    </div>
+                </div>
+            </div>
+            <details class="card" id="cmpDetails">
+                <summary>Bandingkan dengan Mobil 2</summary>
+                <div class="card-body">
+                    <p class="card-sub">Isi data mobil kedua. Klik "Salin" untuk menyalin semua nilai dari Mobil 1.</p>
+                    <button type="button" class="btn-ghost" id="copyFromCar1">↩ Salin dari Mobil 1</button>
+                    <div class="mt">
+                        <div class="field">
+                            <label for="m2hargaOtr">Harga mobil (OTR)</label>
+                            <div class="input-group"><span class="input-prefix">Rp</span><input id="m2hargaOtr" type="number" value="200000000" min="0" step="1000000" inputmode="numeric"></div>
+                        </div>
+                        <div class="field">
+                            <label for="m2dpPctRange">Uang muka (DP)</label>
+                            <div class="range-row">
+                                <input id="m2dpPctRange" type="range" min="0" max="90" step="1" value="20" aria-label="Persentase uang muka mobil 2">
+                                <div class="input-group"><input id="m2dpPct" type="number" value="20" min="0" max="100" step="1" inputmode="numeric"><span class="input-suffix">%</span></div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="m2tenorTahun">Tenor (lama kredit)</label>
+                            <div class="range-row">
+                                <input id="m2tenorTahun" type="range" min="1" max="8" step="1" value="4" aria-label="Tenor kredit mobil 2">
+                                <span class="range-val" id="m2tenorVal">4 tahun</span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="m2bungaFlat">Bunga flat per tahun</label>
+                            <div class="input-group"><input id="m2bungaFlat" type="number" value="4.5" min="0" step="0.1" inputmode="decimal"><span class="input-suffix">%</span></div>
+                        </div>
+                        <div class="field">
+                            <label for="m2admin">Biaya admin &amp; provisi</label>
+                            <div class="input-group"><span class="input-prefix">Rp</span><input id="m2admin" type="number" value="3000000" min="0" step="100000" inputmode="numeric"></div>
+                        </div>
+                        <div class="field">
+                            <div class="seg" role="group" aria-label="Jenis energi mobil 2">
+                                <button type="button" id="m2btnBbm" aria-pressed="true">⛽ Bensin</button>
+                                <button type="button" id="m2btnEv" aria-pressed="false">🔌 Listrik (EV)</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="m2jarak">Jarak tempuh per bulan</label>
+                            <div class="input-group"><input id="m2jarak" type="number" value="1000" min="0" step="50" inputmode="numeric"><span class="input-suffix">km</span></div>
+                        </div>
+                        <div class="energy-pane active" id="m2paneBbm">
+                            <div class="field">
+                                <label for="m2bbmKonsumsi">Konsumsi BBM</label>
+                                <div class="input-group"><input id="m2bbmKonsumsi" type="number" value="14" min="0.1" step="0.5" inputmode="decimal"><span class="input-suffix">km/liter</span></div>
+                            </div>
+                            <div class="field">
+                                <label for="m2bbmHarga">Harga BBM</label>
+                                <div class="input-group"><span class="input-prefix">Rp</span><input id="m2bbmHarga" type="number" value="13000" min="0" step="500" inputmode="numeric"><span class="input-suffix">/liter</span></div>
+                            </div>
+                        </div>
+                        <div class="energy-pane" id="m2paneEv">
+                            <div class="field">
+                                <label for="m2evKonsumsi">Konsumsi listrik</label>
+                                <div class="input-group"><input id="m2evKonsumsi" type="number" value="6" min="0.1" step="0.5" inputmode="decimal"><span class="input-suffix">km/kWh</span></div>
+                            </div>
+                            <div class="field">
+                                <label for="m2evHarga">Tarif listrik</label>
+                                <div class="input-group"><span class="input-prefix">Rp</span><input id="m2evHarga" type="number" value="1700" min="0" step="100" inputmode="numeric"><span class="input-suffix">/kWh</span></div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="m2tol">Biaya tol</label>
+                            <div class="input-group"><span class="input-prefix">Rp</span><input id="m2tol" type="number" value="400000" min="0" step="50000" inputmode="numeric"><span class="input-suffix">/bulan</span></div>
+                        </div>
+                        <div class="field">
+                            <label for="m2parkir">Biaya parkir</label>
+                            <div class="input-group"><span class="input-prefix">Rp</span><input id="m2parkir" type="number" value="200000" min="0" step="25000" inputmode="numeric"><span class="input-suffix">/bulan</span></div>
+                        </div>
+                        <div class="field">
+                            <label for="m2servis">Servis &amp; perawatan</label>
+                            <div class="input-group"><span class="input-prefix">Rp</span><input id="m2servis" type="number" value="250000" min="0" step="25000" inputmode="numeric"><span class="input-suffix">/bulan</span></div>
+                        </div>
+                        <div class="field">
+                            <label for="m2asuransi">Asuransi</label>
+                            <div class="input-group"><span class="input-prefix">Rp</span><input id="m2asuransi" type="number" value="5000000" min="0" step="250000" inputmode="numeric"><span class="input-suffix">/tahun</span></div>
+                        </div>
+                        <div class="field">
+                            <label for="m2pajak">Pajak kendaraan (PKB)</label>
+                            <div class="input-group"><span class="input-prefix">Rp</span><input id="m2pajak" type="number" value="3000000" min="0" step="250000" inputmode="numeric"><span class="input-suffix">/tahun</span></div>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </form>
+
+        <!-- ===== RESULTS ===== -->
+        <div>
+            <div class="hero">
+                <div class="hero-label">Total biaya kepemilikan per bulan</div>
+                <div class="hero-value num" id="heroTotalBulan">Rp 6.850.000</div>
+                <div class="hero-sub">≈ <span class="num-inline" id="heroTotalTahun">Rp 82.200.000</span> per tahun</div>
+            </div>
+
+            <div class="kpi-row">
+                <div class="kpi">
+                    <div class="kpi-label">Angsuran / bulan</div>
+                    <div class="kpi-value num" id="kpiAngsuran">Rp 4.083.333</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-label">Uang muka (DP)</div>
+                    <div class="kpi-value num" id="kpiDp">Rp 50.000.000</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi-label">Total bunga kredit</div>
+                    <div class="kpi-value num" id="kpiBunga">Rp 45.000.000</div>
+                </div>
+                <div class="kpi kpi-gaji">
+                    <div class="kpi-label">Rekomendasi gaji min.</div>
+                    <div class="kpi-value num" id="kpiGaji">Rp 13.611.111</div>
+                    <div class="kpi-note" id="kpiGajiNote">agar cicilan ≤ 30% gaji</div>
+                </div>
+            </div>
+
+            <div id="verdictSlot"></div>
+
+            <div class="card">
+                <h2>Rincian biaya bulanan</h2>
+                <div class="bar-wrap">
+                    <div class="bar" id="barSegments" aria-hidden="true"></div>
+                </div>
+                <div class="legend" id="legend"></div>
+            </div>
+
+            <div class="card">
+                <h2>Per bulan &amp; per tahun</h2>
+                <div class="table-scroll">
+                    <table class="table">
+                        <thead>
+                            <tr><th>Komponen</th><th>Per bulan</th><th>Per tahun</th></tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Ringkasan pinjaman</h2>
+                <div class="summary">
+                    <div class="summary-item">
+                        <div class="summary-label">Pokok pinjaman</div>
+                        <div class="summary-value num" id="sumPokok">Rp 200.000.000</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total dibayar (pokok + bunga)</div>
+                        <div class="summary-value num" id="sumPinjaman">Rp 245.000.000</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Total biaya selama tenor</div>
+                        <div class="summary-value num" id="sumTenor">Rp 411.000.000</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Simulasi tenor</h2>
+                <p class="cmp-note">Angsuran &amp; total bunga untuk tenor 1–8 tahun (mengikuti harga, DP &amp; bunga Mobil 1).</p>
+                <div class="charts">
+                    <div class="chart">
+                        <h3>Angsuran per bulan</h3>
+                        <div class="barchart" id="chartAngsuran"></div>
+                    </div>
+                    <div class="chart">
+                        <h3>Total bunga kredit</h3>
+                        <div class="barchart" id="chartBunga"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Perbandingan Mobil 1 vs Mobil 2</h2>
+                <p class="cmp-note" id="cmpNote"></p>
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <thead><tr><th>Komponen</th><th>Mobil 1</th><th>Mobil 2</th></tr></thead>
+                        <tbody id="cmpBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card export-card">
+                <h2>Ekspor</h2>
+                <div class="export-row">
+                    <button type="button" class="btn-ghost" id="btnCsv">⬇ Unduh CSV (Excel)</button>
+                    <button type="button" class="btn-ghost" id="btnPrint">🖨 Cetak / Simpan PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="foot">
+    <p><strong>Catatan:</strong> perhitungan menggunakan <strong>bunga flat</strong> (bunga = pokok × bunga% × tenor), tanpa memperhitungkan biaya provisi di dalam angsuran. Estimasi asuransi &amp; pajak adalah perkiraan umum dan bisa berbeda tergantung jenis kendaraan &amp; wilayah. Hasil bersifat <strong>informasi</strong>, bukan saran keuangan.</p>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    function num(id) { return parseFloat(document.getElementById(id).value) || 0; }
+    function fmt(v) {
+        return new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(Math.round(v));
+    }
+    function rp(v) { return 'Rp ' + fmt(v); }
+    function compact(v) {
+        var jt = v / 1000000;
+        if (jt >= 100) return fmt(jt) + ' jt';
+        if (jt >= 1) return (Math.round(jt * 10) / 10).toLocaleString('id-ID') + ' jt';
+        return fmt(v / 1000) + ' rb';
+    }
+
+    var modes = { main: 'bbm', m2: 'bbm' };
+
+    function calc(car) {
+        var pid = car === 'main' ? '' : 'm2';
+        function n(id) { return parseFloat(document.getElementById(pid + id).value) || 0; }
+
+        var mode = modes[car];
+        var otr = n('hargaOtr');
+        var dpPct = n('dpPct');
+        var tenor = n('tenorTahun');
+        var bunga = n('bungaFlat');
+        var admin = n('admin');
+
+        var dpAmount = otr * dpPct / 100;
+        var pokok = otr - dpAmount;
+        var totalBunga = pokok * (bunga / 100) * tenor;
+        var totalPinjaman = pokok + totalBunga;
+        var bulan = Math.max(1, tenor * 12);
+        var angsuran = totalPinjaman / bulan;
+
+        var jarak = n('jarak');
+        var energi = mode === 'bbm'
+            ? (jarak / (n('bbmKonsumsi') || 1)) * n('bbmHarga')
+            : (jarak / (n('evKonsumsi') || 1)) * n('evHarga');
+
+        var tol = n('tol'), parkir = n('parkir'), servis = n('servis');
+        var asuransi = n('asuransi'), pajak = n('pajak');
+        var operasional = tol + parkir + servis;
+        var tahunanBulan = (asuransi + pajak) / 12;
+
+        var totalBulan = angsuran + energi + operasional + tahunanBulan;
+        var totalTahun = totalBulan * 12;
+
+        var rasio = num('rasioRange') || 30;
+        var rekomendasi = angsuran / (rasio / 100);
+
+        return {
+            otr: otr, dpPct: dpPct, tenor: tenor, bunga: bunga, admin: admin,
+            dpAmount: dpAmount, pokok: pokok, totalBunga: totalBunga, totalPinjaman: totalPinjaman,
+            bulan: bulan, angsuran: angsuran, energi: energi, tol: tol, parkir: parkir,
+            servis: servis, asuransi: asuransi, pajak: pajak, operasional: operasional,
+            tahunanBulan: tahunanBulan, totalBulan: totalBulan, totalTahun: totalTahun,
+            rasio: rasio, rekomendasi: rekomendasi, mode: mode
+        };
+    }
+
+    function setMode(car, m) {
+        modes[car] = m;
+        var pid = car === 'main' ? '' : 'm2';
+        document.getElementById(pid + 'btnBbm').setAttribute('aria-pressed', m === 'bbm' ? 'true' : 'false');
+        document.getElementById(pid + 'btnEv').setAttribute('aria-pressed', m === 'ev' ? 'true' : 'false');
+        document.getElementById(pid + 'paneBbm').classList.toggle('active', m === 'bbm');
+        document.getElementById(pid + 'paneEv').classList.toggle('active', m === 'ev');
+        render();
+    }
+
+    document.getElementById('btnBbm').addEventListener('click', function () { setMode('main', 'bbm'); });
+    document.getElementById('btnEv').addEventListener('click', function () { setMode('main', 'ev'); });
+    document.getElementById('m2btnBbm').addEventListener('click', function () { setMode('m2', 'bbm'); });
+    document.getElementById('m2btnEv').addEventListener('click', function () { setMode('m2', 'ev'); });
+
+    function sync(rangeId, numId, valEl, suffix) {
+        var r = document.getElementById(rangeId);
+        var m = document.getElementById(numId);
+        if (!r || !m) return;
+        r.addEventListener('input', function () { m.value = r.value; if (valEl) valEl.textContent = r.value + suffix; });
+        m.addEventListener('input', function () {
+            var v = parseFloat(m.value) || 0;
+            r.value = Math.min(parseFloat(r.max), Math.max(parseFloat(r.min), v));
+            if (valEl) valEl.textContent = r.value + suffix;
+        });
+    }
+    sync('dpPctRange', 'dpPct', null, '%');
+    sync('m2dpPctRange', 'm2dpPct', null, '%');
+
+    function bindRangeLabel(rangeId, valEl, suffix) {
+        var r = document.getElementById(rangeId);
+        r.addEventListener('input', function () { valEl.textContent = r.value + suffix; });
+    }
+    bindRangeLabel('tenorTahun', document.getElementById('tenorVal'), ' tahun');
+    bindRangeLabel('m2tenorTahun', document.getElementById('m2tenorVal'), ' tahun');
+    bindRangeLabel('rasioRange', document.getElementById('rasioVal'), '%');
+
+    document.getElementById('copyFromCar1').addEventListener('click', function () {
+        var fields = ['hargaOtr', 'dpPct', 'tenorTahun', 'bungaFlat', 'admin', 'jarak',
+            'bbmKonsumsi', 'bbmHarga', 'evKonsumsi', 'evHarga', 'tol', 'parkir', 'servis', 'asuransi', 'pajak'];
+        fields.forEach(function (f) {
+            var src = document.getElementById(f);
+            var dst = document.getElementById('m2' + f);
+            if (src && dst) dst.value = src.value;
+        });
+        document.getElementById('m2dpPctRange').value = document.getElementById('dpPctRange').value;
+        document.getElementById('m2tenorVal').textContent = document.getElementById('m2tenorTahun').value + ' tahun';
+        setMode('m2', modes.main);
+    });
+
+    function render() {
+        var r = calc('main');
+
+        document.getElementById('heroTotalBulan').textContent = rp(r.totalBulan);
+        document.getElementById('heroTotalTahun').textContent = rp(r.totalTahun);
+        document.getElementById('kpiAngsuran').textContent = rp(r.angsuran);
+        document.getElementById('kpiDp').textContent = rp(r.dpAmount);
+        document.getElementById('kpiBunga').textContent = rp(r.totalBunga);
+        document.getElementById('kpiGaji').textContent = rp(r.rekomendasi);
+        document.getElementById('kpiGajiNote').textContent = 'agar cicilan ≤ ' + fmt(r.rasio) + '% gaji';
+
+        var groups = [
+            { cls: 'seg-ang', val: r.angsuran },
+            { cls: 'seg-energi', val: r.energi },
+            { cls: 'seg-ops', val: r.operasional },
+            { cls: 'seg-tahunan', val: r.tahunanBulan }
+        ];
+        var bar = document.getElementById('barSegments');
+        bar.innerHTML = '';
+        groups.forEach(function (g) {
+            if (g.val <= 0) return;
+            var seg = document.createElement('div');
+            seg.className = 'seg ' + g.cls;
+            seg.style.flexGrow = String(g.val);
+            bar.appendChild(seg);
+        });
+
+        var legendDefs = [
+            { cls: 'seg-ang', name: 'Angsuran kredit', val: r.angsuran },
+            { cls: 'seg-energi', name: 'Energi (' + (r.mode === 'bbm' ? 'BBM' : 'listrik') + ')', val: r.energi },
+            { cls: 'seg-ops', name: 'Tol + parkir + servis', val: r.operasional },
+            { cls: 'seg-tahunan', name: 'Asuransi + pajak', val: r.tahunanBulan }
+        ];
+        document.getElementById('legend').innerHTML = legendDefs.map(function (d) {
+            var pct = r.totalBulan > 0 ? (d.val / r.totalBulan * 100) : 0;
+            return '<div class="legend-row">' +
+                '<span class="legend-swatch ' + d.cls + '"></span>' +
+                '<span class="legend-name">' + d.name + '</span>' +
+                '<span class="legend-val">' + rp(d.val) + '</span>' +
+                '<span class="legend-pct">' + pct.toFixed(1) + '%</span></div>';
+        }).join('');
+
+        var rows = [
+            { name: 'Angsuran kredit', bln: r.angsuran },
+            { name: 'Energi (' + (r.mode === 'bbm' ? 'BBM' : 'listrik') + ')', bln: r.energi },
+            { name: 'Tol', bln: r.tol },
+            { name: 'Parkir', bln: r.parkir },
+            { name: 'Servis & perawatan', bln: r.servis },
+            { name: 'Asuransi', bln: r.asuransi / 12 },
+            { name: 'Pajak kendaraan (PKB)', bln: r.pajak / 12 }
+        ];
+        var tbody = document.getElementById('tableBody');
+        var html = rows.map(function (row) {
+            return '<tr><td>' + row.name + '</td><td>' + rp(row.bln) + '</td><td>' + rp(row.bln * 12) + '</td></tr>';
+        }).join('');
+        html += '<tr class="total-row"><td>Total</td><td>' + rp(r.totalBulan) + '</td><td>' + rp(r.totalTahun) + '</td></tr>';
+        tbody.innerHTML = html;
+
+        document.getElementById('sumPokok').textContent = rp(r.pokok);
+        document.getElementById('sumPinjaman').textContent = rp(r.totalPinjaman);
+        document.getElementById('sumTenor').textContent = rp(r.totalBulan * r.bulan);
+
+        renderVerdict(r);
+        renderTenorChart(r);
+        renderCompare(r);
+    }
+
+    function renderVerdict(r) {
+        var slot = document.getElementById('verdictSlot');
+        var gaji = num('gajiSaya');
+        slot.innerHTML = '';
+        if (gaji <= 0) return;
+        var ok = gaji >= r.rekomendasi;
+        var el = document.createElement('div');
+        el.className = 'verdict ' + (ok ? 'ok' : 'no');
+        el.innerHTML = '<span class="dot"></span>' +
+            (ok
+                ? 'Gaji kamu mencukupi aturan ' + fmt(r.rasio) + '% dari cicilan.'
+                : 'Gaji kamu di bawah rekomendasi (min. ' + rp(r.rekomendasi) + ').');
+        slot.appendChild(el);
+    }
+
+    function renderTenorChart(r) {
+        var pokok = r.otr * (1 - r.dpPct / 100);
+        var angs = [], bunga = [];
+        for (var t = 1; t <= 8; t++) {
+            var tb = pokok * (r.bunga / 100) * t;
+            bunga.push(tb);
+            angs.push((pokok + tb) / (t * 12));
+        }
+        renderBars('chartAngsuran', angs, r.tenor - 1, compact);
+        renderBars('chartBunga', bunga, r.tenor - 1, compact);
+    }
+
+    function renderBars(id, values, selIdx, labelFmt) {
+        var container = document.getElementById(id);
+        var max = Math.max.apply(null, values) || 1;
+        container.innerHTML = values.map(function (v, i) {
+            var h = v / max * 100;
+            var sel = i === selIdx ? ' sel' : '';
+            return '<div class="bar-col' + sel + '" title="' + rp(v) + '">' +
+                '<span class="bar-label">' + labelFmt(v) + '</span>' +
+                '<span class="bar-track"><span class="bar-fill" style="height:' + h.toFixed(1) + '%"></span></span>' +
+                '<span class="bar-x">' + (i + 1) + ' th</span></div>';
+        }).join('');
+    }
+
+    function renderCompare(r1) {
+        var r2 = calc('m2');
+        var rows = [
+            { name: 'Harga (OTR)', a: r1.otr, b: r2.otr },
+            { name: 'Angsuran / bulan', a: r1.angsuran, b: r2.angsuran },
+            { name: 'Energi / bulan', a: r1.energi, b: r2.energi },
+            { name: 'Total biaya / bulan', a: r1.totalBulan, b: r2.totalBulan },
+            { name: 'Total biaya / tahun', a: r1.totalTahun, b: r2.totalTahun },
+            { name: 'Rekomendasi gaji', a: r1.rekomendasi, b: r2.rekomendasi }
+        ];
+        document.getElementById('cmpBody').innerHTML = rows.map(function (row) {
+            var winA = row.a < row.b ? ' win' : '';
+            var winB = row.a > row.b ? ' win' : '';
+            return '<tr><td>' + row.name + '</td>' +
+                '<td class="' + winA + '">' + rp(row.a) + '</td>' +
+                '<td class="' + winB + '">' + rp(row.b) + '</td></tr>';
+        }).join('');
+
+        var selisih = Math.abs(r1.totalBulan - r2.totalBulan);
+        var cheaper = r1.totalBulan <= r2.totalBulan ? 'Mobil 1' : 'Mobil 2';
+        document.getElementById('cmpNote').textContent = cheaper + ' lebih hemat ' + rp(selisih) + ' per bulan.';
+    }
+
+    function downloadCsv() {
+        var r = calc('main');
+        var rows = [
+            ['Komponen', 'Per bulan', 'Per tahun'],
+            ['Angsuran kredit', Math.round(r.angsuran), Math.round(r.angsuran * 12)],
+            ['Energi (' + (r.mode === 'bbm' ? 'BBM' : 'listrik') + ')', Math.round(r.energi), Math.round(r.energi * 12)],
+            ['Tol', Math.round(r.tol), Math.round(r.tol * 12)],
+            ['Parkir', Math.round(r.parkir), Math.round(r.parkir * 12)],
+            ['Servis & perawatan', Math.round(r.servis), Math.round(r.servis * 12)],
+            ['Asuransi', Math.round(r.asuransi / 12), Math.round(r.asuransi)],
+            ['Pajak kendaraan (PKB)', Math.round(r.pajak / 12), Math.round(r.pajak)],
+            ['Total', Math.round(r.totalBulan), Math.round(r.totalTahun)]
+        ];
+        var csv = '﻿' + rows.map(function (row) { return row.join(';'); }).join('\r\n');
+        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'tco-mobil.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+    }
+
+    document.getElementById('btnCsv').addEventListener('click', downloadCsv);
+    document.getElementById('btnPrint').addEventListener('click', function () { window.print(); });
+
+    document.getElementById('tcoForm').addEventListener('input', render);
+    render();
+})();
+</script>
+</body>
+</html>
